@@ -269,8 +269,22 @@ namespace NathanSteelmanUntitledProject
             if (param.ContainsKey(curkey) && SingleKeyHold(prevKBS,KBS,curkey)) { param[curkey]++; } else if(SingleKeyHold(prevKBS,KBS,curkey)){ param.Add(curkey, 2); }
             curkey = Keys.Z;
             if (param.ContainsKey(curkey) && SingleKeyHold(prevKBS,KBS,curkey)) { param[curkey]++; } else if (SingleKeyHold(prevKBS, KBS, curkey)) { param.Add(curkey, 2); }
-
-
+            curkey = Keys.Up;
+            if (param.ContainsKey(curkey) && SingleKeyHold(prevKBS, KBS, curkey)) { param[curkey]++; } else if (SingleKeyHold(prevKBS, KBS, curkey)) { param.Add(curkey, 2); }
+            curkey = Keys.Left;
+            if (param.ContainsKey(curkey) && SingleKeyHold(prevKBS, KBS, curkey)) { param[curkey]++; } else if (SingleKeyHold(prevKBS, KBS, curkey)) { param.Add(curkey, 2); }
+            curkey = Keys.Down;
+            if (param.ContainsKey(curkey) && SingleKeyHold(prevKBS, KBS, curkey)) { param[curkey]++; } else if (SingleKeyHold(prevKBS, KBS, curkey)) { param.Add(curkey, 2); }
+            curkey = Keys.Right;
+            if (param.ContainsKey(curkey) && SingleKeyHold(prevKBS, KBS, curkey)) { param[curkey]++; } else if (SingleKeyHold(prevKBS, KBS, curkey)) { param.Add(curkey, 2); }
+            curkey = Keys.Space;
+            if (param.ContainsKey(curkey) && SingleKeyHold(prevKBS, KBS, curkey)) { param[curkey]++; } else if (SingleKeyHold(prevKBS, KBS, curkey)) { param.Add(curkey, 2); }
+            curkey = Keys.Enter;
+            if (param.ContainsKey(curkey) && SingleKeyHold(prevKBS, KBS, curkey)) { param[curkey]++; } else if (SingleKeyHold(prevKBS, KBS, curkey)) { param.Add(curkey, 2); }
+            curkey = Keys.LeftControl;
+            if (param.ContainsKey(curkey) && SingleKeyHold(prevKBS, KBS, curkey)) { param[curkey]++; } else if (SingleKeyHold(prevKBS, KBS, curkey)) { param.Add(curkey, 2); }
+            curkey = Keys.LeftAlt;
+            if (param.ContainsKey(curkey) && SingleKeyHold(prevKBS, KBS, curkey)) { param[curkey]++; } else if (SingleKeyHold(prevKBS, KBS, curkey)) { param.Add(curkey, 2); }
 
             return param;
         }

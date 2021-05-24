@@ -14,6 +14,7 @@ namespace NathanSteelmanUntitledProject
         private int maxDeviation;
         private List<KeyCondition> keyOrder;
         private Dictionary<Keys, int> saved;
+        private Rectangle keyRect;
         private Move basic;
 
         public Dictionary<Keys,int> Saved
@@ -61,13 +62,14 @@ namespace NathanSteelmanUntitledProject
         //a max amount of wasted keystrokes(deviations),
         //a list of keyConditions(in an order),
         //and optional parameters for starting deviation and saved key-->int dictionary
-        public Move(string name, int maxDeviation,List<KeyCondition> keyOrder, int deviation=0,Dictionary<Keys,int> saved = null)
+        public Move(string name, int maxDeviation,List<KeyCondition> keyOrder,Rectangle keyRect, int deviation=0,Dictionary<Keys,int> saved = null)
         {
             this.name = name;
             this.maxDeviation = maxDeviation;
             this.keyOrder = keyOrder;
             this.deviation = deviation;
             this.saved = saved;
+            this.keyRect = keyRect;
             this.basic = new Move();
         }
         /// <summary>
@@ -236,5 +238,17 @@ namespace NathanSteelmanUntitledProject
             }
         }
 
+        public void Draw(SpriteBatch sb,SpriteFont keyFont, SpriteFont numFont,Texture2D texture)
+        {
+            int p = 0;
+            for(int i = 0; i < keyOrder.Count; i++)
+            {
+                if(i%3 == 0)
+                {
+                    p++;
+                }
+                keyOrder[i].Draw(sb, keyFont, numFont, this.keyRect, new Vector2((i % 3 * keyRect.Width) + keyRect.Width, (p - 1) * keyRect.Height),texture);
+            }
+        }
     }
 }

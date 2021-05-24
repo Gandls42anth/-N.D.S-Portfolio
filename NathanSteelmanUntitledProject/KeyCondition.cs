@@ -118,7 +118,23 @@ namespace NathanSteelmanUntitledProject
             this.key = this.basic.key;
             this.current = 0;
         }
+        /// <summary>
+        /// This method should draw the key in a large font, and the range centered below it in a smaller font
+        /// </summary>
+        /// <param name="sb"></param>
+        public void Draw(SpriteBatch sb,SpriteFont keyFont,SpriteFont numFont,Rectangle rect, Vector2 position,Texture2D texture)
+        {
+            Rectangle frontRect = new Rectangle(rect.X + 5, rect.Y + 5, rect.Width - 5, rect.Height - 5);
+            Vector2 frontVector = new Vector2(position.X+5, position.Y+5);
+            sb.Begin();
+            sb.Draw(texture, position, rect, Color.Black);
+            sb.Draw(texture, frontVector, frontRect, Color.White);
 
+
+
+
+            sb.End();
+        }
 
     }
 }

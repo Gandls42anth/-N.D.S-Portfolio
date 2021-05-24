@@ -13,6 +13,10 @@ namespace NathanSteelmanUntitledProject
         private Rectangle position;
         private Texture2D texture;
 
+        public Point Center
+        {
+            get { return new Point(this.position.X, this.position.Y); }
+        }
         public Rectangle Position
         {
             get { return this.position; }
