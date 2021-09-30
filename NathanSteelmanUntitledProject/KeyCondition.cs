@@ -11,7 +11,7 @@ namespace NathanSteelmanUntitledProject
     {
         private int goal;
         private int forgiveness;
-        private Keys key;
+        private char key;
         private int current;
         private KeyCondition basic;
         /// <summary>
@@ -81,7 +81,7 @@ namespace NathanSteelmanUntitledProject
         /// <summary>
         /// Property for the required key
         /// </summary>
-        public Keys Key
+        public char Key
         {
             get { return this.key; }
             set
@@ -90,7 +90,7 @@ namespace NathanSteelmanUntitledProject
             }
         }
 
-        public KeyCondition(int goal,int forgiveness, Keys key)
+        public KeyCondition(int goal,int forgiveness, char key)
         {
             this.current = 0;
             this.goal = goal;

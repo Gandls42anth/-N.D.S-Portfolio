@@ -13,11 +13,11 @@ namespace NathanSteelmanUntitledProject
         private int deviation;
         private int maxDeviation;
         private List<KeyCondition> keyOrder;
-        private Dictionary<Keys, int> saved;
+        private Dictionary<char, int> saved;
         private Rectangle keyRect;
         private Move basic;
 
-        public Dictionary<Keys,int> Saved
+        public Dictionary<char,int> Saved
         {
             get { return this.saved; }
             set
@@ -62,7 +62,7 @@ namespace NathanSteelmanUntitledProject
         //a max amount of wasted keystrokes(deviations),
         //a list of keyConditions(in an order),
         //and optional parameters for starting deviation and saved key-->int dictionary
-        public Move(string name, int maxDeviation,List<KeyCondition> keyOrder,Rectangle keyRect, int deviation=0,Dictionary<Keys,int> saved = null)
+        public Move(string name, int maxDeviation,List<KeyCondition> keyOrder,Rectangle keyRect, int deviation=0,Dictionary<char,int> saved = null)
         {
             this.name = name;
             this.maxDeviation = maxDeviation;
@@ -89,7 +89,7 @@ namespace NathanSteelmanUntitledProject
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
-        public int Check(Dictionary<Keys,int> param)
+        public int Check(Dictionary<char,int> param)
         {
             KeyCondition current = null;
             int currentIndex = 0;
@@ -100,11 +100,11 @@ namespace NathanSteelmanUntitledProject
                 if (deviation < maxDeviation)
                 {
                     //Filter the new parameter dictionary by your currently saved dictionary, this ensures only new keystrokes are passed into the future calculations
-                    Dictionary<Keys, int> filter = param;
+                    Dictionary<char, int> filter = param;
                     //If there is no currently saved dictionary (meaning this is the first run-through) don't attempt to filter
                     if (saved != null)
                     {
-                        foreach (Keys n in saved.Keys)
+                        foreach (char n in saved.Keys)
                         {
                             if (filter.ContainsKey(n))
                             {
@@ -112,7 +112,7 @@ namespace NathanSteelmanUntitledProject
                             }
                         }
                     }
-
+                    //Set the "current" keycondition to closest incomplete one in the list
                     for (int i = 0; i < keyOrder.Count; i++)
                     {
                         //This means the current is incomplete condition closest to the front (and therefore first in the order) in the list
@@ -125,7 +125,7 @@ namespace NathanSteelmanUntitledProject
                     //Now the current refers to the keycondition that needs to be fulfilled
                     //And the currentIndex refers to its position in the KeyOrder List 
 
-                    foreach (Keys m in filter.Keys)
+                    foreach (char m in filter.Keys)
                     {
                         if (m == current.Key)
                         {
@@ -162,6 +162,7 @@ namespace NathanSteelmanUntitledProject
                     saved = param;
                 }
             }
+            //Although this could be chained as an "else" to the previous if statement, that would neglect the deviation>max deviation outcome
             if (Ready())
             {
                 return 1;

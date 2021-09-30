@@ -21,12 +21,18 @@ namespace NathanSteelmanUntitledProject
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private Queue<KeyboardState> KBSqueue;
-        private Dictionary<Keys,int> inputs;
-        private SpriteFont Normal;
+        private Dictionary<char,int> inputs;
+        private SpriteFont keyFont;
+        private SpriteFont numFont;
         private GameState curGS;
         private KeyboardState previousKBS;
         private KeyboardState KBS;
         int frame;
+        private Texture2D keyBackground;
+        private KeyCondition conditionQ;
+        private KeyCondition conditionT;
+        private KeyCondition conditionE;
+        private Move testMove;
 
         public Game1()
         {
@@ -40,14 +46,23 @@ namespace NathanSteelmanUntitledProject
             // TODO: Add your initialization logic here
             curGS = GameState.qte;
             KBSqueue = new Queue<KeyboardState>();
-            inputs = new Dictionary<Keys, int>();
+            inputs = new Dictionary<char, int>();
+            conditionQ = new KeyCondition(30, 5,'Q');
+            conditionT = new KeyCondition(30, 5, 'T');
+            conditionE = new KeyCondition(30, 5, 'E');
+            testMove = new Move("Test", 1000, new List<KeyCondition> { conditionQ, conditionT, conditionE }, new Rectangle(20, 20, 50, 50));
+
+
+
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            this.Normal = Content.Load<SpriteFont>("Normal");
+            this.keyBackground = Content.Load<Texture2D>("keyBackground");
+            this.keyFont = Content.Load<SpriteFont>("KeyFont");
+            this.numFont = Content.Load<SpriteFont>("NumFont");
 
             // TODO: use this.Content to load your game content here
         }
@@ -67,14 +82,16 @@ namespace NathanSteelmanUntitledProject
                 case GameState.qte:
                     KBS = Keyboard.GetState();
                     KBSqueue.Enqueue(KBS);
-                    if (KBSqueue.Count > 120)
+                    if (KBSqueue.Count > 360)
                     {
                         KBSqueue.Dequeue();
                     }
                     
-                    inputs = KeysHeld(KBSqueue);
+                    inputs = CastToChars(KeysHeld(KBSqueue));
                     previousKBS = Keyboard.GetState();
+                    testMove.Check(inputs);
                     break;
+
             }
 
 
@@ -92,12 +109,13 @@ namespace NathanSteelmanUntitledProject
                 GraphicsDevice.Clear(Color.CornflowerBlue);
             }
             _spriteBatch.Begin();
-            if(inputs.ContainsKey(Keys.D))
+            if(inputs.ContainsKey('D'))
             {
-                _spriteBatch.DrawString(Normal, inputs[Keys.D].ToString(), new Vector2(300), Color.Black);
+                _spriteBatch.DrawString(keyFont, inputs['D'].ToString(), new Vector2(100,100), Color.Black);
             }
-            _spriteBatch.DrawString(Normal, inputs.Count.ToString(), new Vector2(200), Color.Black);
-            _spriteBatch.DrawString(Normal, KBSqueue.Count.ToString(), new Vector2(100), Color.Black);
+            _spriteBatch.DrawString(keyFont, inputs.Count.ToString(), new Vector2(100,200), Color.Black);
+            _spriteBatch.DrawString(keyFont, KBSqueue.Count.ToString(), new Vector2(100,300), Color.Black);
+            testMove.Draw(_spriteBatch,keyFont,numFont,keyBackground);
 
             _spriteBatch.End();
 
@@ -288,6 +306,17 @@ namespace NathanSteelmanUntitledProject
 
             return param;
         }
+
+        public Dictionary<char,int> CastToChars(Dictionary<Keys, int> param)
+        {
+            Dictionary<char, int> result = new Dictionary<char, int> { };
+            foreach(Keys n in param.Keys)
+            {
+                result.Add(n.ToString().ToUpper().ToCharArray()[0], param[n]);
+            }
+            return result;
+        }
+
 
     }
 }
