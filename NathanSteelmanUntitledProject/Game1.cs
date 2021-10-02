@@ -47,9 +47,9 @@ namespace NathanSteelmanUntitledProject
             curGS = GameState.qte;
             KBSqueue = new Queue<KeyboardState>();
             inputs = new Dictionary<char, int>();
-            conditionQ = new KeyCondition(30, 5,'Q');
-            conditionT = new KeyCondition(30, 5, 'T');
-            conditionE = new KeyCondition(30, 5, 'E');
+            conditionQ = new KeyCondition(30, 25,'Q');
+            conditionT = new KeyCondition(30, 25, 'T');
+            conditionE = new KeyCondition(30, 25, 'E');
             testMove = new Move("Test", 1000, new List<KeyCondition> { conditionQ, conditionT, conditionE }, new Rectangle(20, 20, 50, 50));
 
 
@@ -111,10 +111,10 @@ namespace NathanSteelmanUntitledProject
             _spriteBatch.Begin();
             if(inputs.ContainsKey('D'))
             {
-                _spriteBatch.DrawString(keyFont, inputs['D'].ToString(), new Vector2(100,100), Color.Black);
+                //_spriteBatch.DrawString(keyFont, inputs['D'].ToString(), new Vector2(100,100), Color.Black);
             }
-            _spriteBatch.DrawString(keyFont, inputs.Count.ToString(), new Vector2(100,200), Color.Black);
-            _spriteBatch.DrawString(keyFont, KBSqueue.Count.ToString(), new Vector2(100,300), Color.Black);
+            //_spriteBatch.DrawString(keyFont, inputs.Count.ToString(), new Vector2(100,200), Color.Black);
+            //_spriteBatch.DrawString(keyFont, KBSqueue.Count.ToString(), new Vector2(100,300), Color.Black);
             testMove.Draw(_spriteBatch,keyFont,numFont,keyBackground);
 
             _spriteBatch.End();

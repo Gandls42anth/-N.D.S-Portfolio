@@ -13,7 +13,9 @@ namespace NathanSteelmanUntitledProject
         private int forgiveness;
         private char key;
         private int current;
-        private KeyCondition basic;
+        private int baseGoal;
+        private int baseForgiveness;
+        private char baseKey;
         /// <summary>
         /// The amount of deviation outside of the target range( on the plus side, being below the required range means nothing)
         /// </summary>
@@ -93,29 +95,22 @@ namespace NathanSteelmanUntitledProject
         public KeyCondition(int goal,int forgiveness, char key)
         {
             this.current = 0;
-            this.goal = goal;
-            this.forgiveness = forgiveness;
-            this.key = key;
-            this.basic = new KeyCondition();
-        }
-        /// <summary>
-        /// Private constructor used only to create a default version of the keycondition
-        /// </summary>
-        private KeyCondition()
-        {
-            this.basic.goal = this.goal;
-            this.basic.forgiveness = this.forgiveness;
-            this.basic.key = this.key;
-            this.basic.current = this.current;
+            this.goal = this.baseGoal = goal;
+            this.forgiveness =this.baseForgiveness= forgiveness;
+            this.key =this.baseKey= key;
         }
         /// <summary>
         /// Resets the  key condition to its default state
         /// </summary>
+
+        //This exists for the possibility that these values may become altered
+        //I.e You have an ability that allows your next move to allow  more forgiveness, or be all one key, or lessen/increase the goals so it can be performed faster/slower
+        //Essentially this humors the possibility of altering the nature of your keyconditions
         public void Reset()
         {
-            this.goal = this.basic.goal;
-            this.forgiveness = this.basic.forgiveness;
-            this.key = this.basic.key;
+            this.goal = this.baseGoal;
+            this.forgiveness = this.baseForgiveness;
+            this.key = this.baseKey;
             this.current = 0;
         }
         /// <summary>
@@ -124,16 +119,24 @@ namespace NathanSteelmanUntitledProject
         /// <param name="sb"></param>
         public void Draw(SpriteBatch sb,SpriteFont keyFont,SpriteFont numFont,Rectangle rect, Vector2 position,Texture2D texture)
         {
-            Rectangle frontRect = new Rectangle(rect.X + 5, rect.Y + 5, rect.Width - 5, rect.Height - 5);
+            Rectangle frontRect = new Rectangle(rect.X + 5, rect.Y + 5, rect.Width - 10, rect.Height - 10);
             Vector2 frontVector = new Vector2(position.X+5, position.Y+5);
-            sb.Begin();
             sb.Draw(texture, position, rect, Color.Black);
-            sb.Draw(texture, frontVector, frontRect, Color.White);
+            if (this.Complete && !this.OverBoard)
+            {
+                sb.Draw(texture, frontVector, frontRect, Color.Green);
+            }else if (this.OverBoard)
+            {
+                sb.Draw(texture, frontVector, frontRect, Color.Red);
+            }
+            else
+            {
+                sb.Draw(texture, frontVector, frontRect, Color.White);
+            }
+            sb.DrawString(keyFont, this.key.ToString(), new Vector2(position.X + 20, position.Y + 15),Color.Black);
+            sb.DrawString(numFont, (this.goal - forgiveness) + "-" + (this.goal + forgiveness), new Vector2(position.X + 15, position.Y + 35), Color.Black);
+            sb.DrawString(numFont, this.current.ToString(), new Vector2(position.X + 15, position.Y + 55), Color.Black);
 
-
-
-
-            sb.End();
         }
 
     }

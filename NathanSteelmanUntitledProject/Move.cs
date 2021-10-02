@@ -10,12 +10,16 @@ namespace NathanSteelmanUntitledProject
     class Move
     {
         private string name;
+        private string baseName;
         private int deviation;
         private int maxDeviation;
+        private int baseMaxDev;
         private List<KeyCondition> keyOrder;
+        private List<KeyCondition> baseKeyOrder;
+        private KeyCondition current;
+        private int currentIndex;
         private Dictionary<char, int> saved;
         private Rectangle keyRect;
-        private Move basic;
 
         public Dictionary<char,int> Saved
         {
@@ -62,26 +66,12 @@ namespace NathanSteelmanUntitledProject
         //a max amount of wasted keystrokes(deviations),
         //a list of keyConditions(in an order),
         //and optional parameters for starting deviation and saved key-->int dictionary
-        public Move(string name, int maxDeviation,List<KeyCondition> keyOrder,Rectangle keyRect, int deviation=0,Dictionary<char,int> saved = null)
+        public Move(string name, int maxDeviation,List<KeyCondition> keyOrder,Rectangle keyRect)
         {
-            this.name = name;
-            this.maxDeviation = maxDeviation;
-            this.keyOrder = keyOrder;
-            this.deviation = deviation;
-            this.saved = saved;
+            this.name =this.baseName = name;
+            this.maxDeviation =this.baseMaxDev = maxDeviation;
+            this.keyOrder =this.baseKeyOrder = keyOrder;
             this.keyRect = keyRect;
-            this.basic = new Move();
-        }
-        /// <summary>
-        /// A private constructor used only to create a default version of the move
-        /// </summary>
-        private Move()
-        {
-            this.basic.name = this.name;
-            this.basic.maxDeviation = this.maxDeviation;
-            this.basic.keyOrder = this.keyOrder;
-            this.basic.deviation = this.deviation;
-            this.basic.saved = this.saved;
         }
         /// <summary>
         /// This method updates and returns the status of the move (In regards to its keyconditions being satisfied and thererfore casting)
@@ -91,8 +81,6 @@ namespace NathanSteelmanUntitledProject
         /// <returns></returns>
         public int Check(Dictionary<char,int> param)
         {
-            KeyCondition current = null;
-            int currentIndex = 0;
             //First, check if its already ready, if not attempt to update
             if (!Ready())
             {
@@ -100,26 +88,30 @@ namespace NathanSteelmanUntitledProject
                 if (deviation < maxDeviation)
                 {
                     //Filter the new parameter dictionary by your currently saved dictionary, this ensures only new keystrokes are passed into the future calculations
-                    Dictionary<char, int> filter = param;
+                    Dictionary<char, int> filter = new Dictionary<char, int>();
                     //If there is no currently saved dictionary (meaning this is the first run-through) don't attempt to filter
                     if (saved != null)
                     {
                         foreach (char n in saved.Keys)
                         {
-                            if (filter.ContainsKey(n))
+                            if (param.ContainsKey(n))
                             {
-                                filter[n] -= saved[n];
+                                filter.Add(n, param[n] - saved[n]);
                             }
                         }
                     }
                     //Set the "current" keycondition to closest incomplete one in the list
                     for (int i = 0; i < keyOrder.Count; i++)
                     {
-                        //This means the current is incomplete condition closest to the front (and therefore first in the order) in the list
-                        if (current == null && !keyOrder[i].Complete)
+                        //This means that "current" is the incomplete condition closest to the front (and therefore first in the order) in the list
+                        if (current == null)
                         {
-                            current = keyOrder[i];
-                            currentIndex = i;
+                            current = keyOrder[0];
+                            currentIndex = 0;
+                        }else if (current.Complete && currentIndex!=(keyOrder.Count))
+                        {
+                            current = keyOrder[i + 1];
+                            currentIndex++;
                         }
                     }
                     //Now the current refers to the keycondition that needs to be fulfilled
@@ -136,18 +128,15 @@ namespace NathanSteelmanUntitledProject
                         {
                             //entering this block means that the filtered list contains a value for the previous keycondition
                             //I.E this is for when the players has technically completed the previous condition but is still holding the key
-                            //Meaning that these keystrokes will be forgiven and not counted as "deviation"s until they pass out of the range of the keycondition
+                            //Meaning that these keystrokes will be forgiven and not counted as "deviation"s until they pass out of the range of forgiveness
 
-                            //Right now all we know is the filtered list has a keystroke for the previously completed condition so:
+                            //Update its "current"
+                            keyOrder[currentIndex - 1].Current += filter[m];
+
+                            //If its gone overboard, count it as a deviation
                             if (keyOrder[currentIndex - 1].OverBoard)
                             {
-                                //This means the previous keycondition is overboard, meaning the extra keystroke should count as a deviation
                                 deviation += filter[m];
-                            }
-                            else
-                            {
-                                //If theres still extra room in the previous keycondition, the extra keystrokes won't be counted against you
-                                keyOrder[currentIndex - 1].Current += filter[m];
                             }
 
                         }
@@ -160,6 +149,9 @@ namespace NathanSteelmanUntitledProject
                     }
                     //Save the original parameter as the new "saved"
                     saved = param;
+
+                    //Since filter exists on the stack it does not need to be cleared at the end of the method
+                    //And the garbage collector will clear out the heap data it used due to the "new" keyword
                 }
             }
             //Although this could be chained as an "else" to the previous if statement, that would neglect the deviation>max deviation outcome
@@ -229,10 +221,11 @@ namespace NathanSteelmanUntitledProject
         /// </summary>
         public void Reset()
         {
-            this.name = this.basic.name;
-            this.deviation = this.basic.deviation;
-            this.maxDeviation = this.basic.maxDeviation;
-            this.saved = this.basic.saved;
+            current = null;
+            this.name = this.baseName;
+            this.deviation = 0;
+            this.maxDeviation = this.baseMaxDev;
+            this.saved = null;
             foreach(KeyCondition n in keyOrder)
             {
                 n.Reset();
