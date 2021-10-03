@@ -101,18 +101,16 @@ namespace NathanSteelmanUntitledProject
                         }
                     }
                     //Set the "current" keycondition to closest incomplete one in the list
-                    for (int i = 0; i < keyOrder.Count; i++)
+                    //If this is the first run through,then set it to the first in the list
+                    if (current == null)
                     {
-                        //This means that "current" is the incomplete condition closest to the front (and therefore first in the order) in the list
-                        if (current == null)
-                        {
-                            current = keyOrder[0];
-                            currentIndex = 0;
-                        }else if (current.Complete && currentIndex!=(keyOrder.Count))
-                        {
-                            current = keyOrder[i + 1];
-                            currentIndex++;
-                        }
+                        current = keyOrder[0];
+                        currentIndex = 0;
+                    }
+                    else if (current.Complete && currentIndex != (keyOrder.Count-1))
+                    {
+                        currentIndex++;
+                        current = keyOrder[currentIndex];
                     }
                     //Now the current refers to the keycondition that needs to be fulfilled
                     //And the currentIndex refers to its position in the KeyOrder List 
@@ -158,7 +156,7 @@ namespace NathanSteelmanUntitledProject
             if (Ready())
             {
                 return 1;
-            }else if (deviation > maxDeviation)
+            }else if (deviation > maxDeviation || AnyOverBoard())
             {
                 return -1;
             }
