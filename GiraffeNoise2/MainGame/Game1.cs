@@ -64,7 +64,7 @@ namespace MainGame
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
+            //Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
 
@@ -86,6 +86,7 @@ namespace MainGame
 
         protected override void LoadContent()
         {
+            /*
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
@@ -96,6 +97,7 @@ namespace MainGame
             this.frontLayer = this.Content.Load<SpriteFont>("FrontLayer");
             this.Subtitle = this.Content.Load<SpriteFont>("Subtitle");
             this.Normal = this.Content.Load<SpriteFont>("Normal");
+            
             
             // for in game
             this.viewCone = this.Content.Load<Texture2D>("unnamed");
@@ -117,6 +119,7 @@ namespace MainGame
 
             currentState = GameState.Title;
             this.level = new Level(GameState.Normal, 0, background, new Rectangle(0, 100, (int)background.Width / 2, (int)background.Height / 2), guard1);
+            */
         }
 
         protected override void Update(GameTime gameTime)
