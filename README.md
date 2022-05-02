@@ -1,3 +1,19 @@
+This is Nathan Steelman's Portfolio
+It contains both completed and in progress projects.
+
+Currently it contains:
+Giraffe Noise 2 (Completed)
+We Need Space (WIP)
+UntitledQTE (WIP)
+
+I'm  most proud of We Need Space as that is the most recent and most polished of the 3.
+Documentation for We Need Space is seperate from the other projects.
+We Need Space also has its own repository from when it was being worked on by multiple people, here's the link: https://github.com/JacksonBlanchard/WeNeedSpace
+
+
+
+The following the readme of Giraffe Noise 2, It's been included in the readme for the repository
+
 # Team **Giraffe Noise**
 ## IGME-106-SECTION Spring 2021
 
